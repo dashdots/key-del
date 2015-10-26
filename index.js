@@ -3,7 +3,12 @@
 "use strict";
 
 var DOT_SEPARATOR = ".";
-var _ = require('lodash');
+
+var clone = require('lodash/lang/clone');
+var isUndefined = require('lodash/lang/isUndefined');
+var isBoolean = require('lodash/lang/isBoolean');
+var isArray = require('lodash/lang/isArray');
+var isObject = require('lodash/lang/isObject');
 
 var deleteKeysFromObject = function (object, keys, options) {
   var keysToDelete;
@@ -12,8 +17,8 @@ var deleteKeysFromObject = function (object, keys, options) {
   var isDeep = true;
 
   // to preserve backwards compatibility, assume that only explicit options means shallow copy
-  if (_.isUndefined(options) == false) {
-    if (_.isBoolean(options.copy)) {
+  if (isUndefined(options) == false) {
+    if (isBoolean(options.copy)) {
       isDeep = options.copy;
     }
   }
@@ -21,7 +26,7 @@ var deleteKeysFromObject = function (object, keys, options) {
   // do not modify original object if copy is true (default)
   var finalObject;
   if (isDeep) {
-    finalObject = _.clone(object, isDeep);
+    finalObject = clone(object, isDeep);
   } else {
     finalObject = object;
   }
@@ -70,7 +75,7 @@ var deleteKeysFromObject = function (object, keys, options) {
           }
 
         } else {
-          if (_.isObject(finalObject[prop]) && !_.isArray(finalObject[prop])) {
+          if (isObject(finalObject[prop]) && !isArray(finalObject[prop])) {
 
             finalObject[prop] = deleteKeysFromObject(finalObject[prop], keysToDelete, options);
           }
